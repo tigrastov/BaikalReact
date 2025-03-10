@@ -1,0 +1,292 @@
+/* Сбросим маргины и паддинги для body */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'K2D', sans-serif;
+}
+
+/* Стили для хедера */
+header {
+
+  display: flex;
+  flex-direction: column; /* Логотип сверху */
+  align-items: center;     /* Центрирование всех элементов */
+  justify-content: space-between; 
+  padding: 10px 20px;      /* Отступы */
+  background-color: #164C8A; /* Цвет фона */
+  color: white;           /* Цвет текста */
+  position: relative;     /* Для позиционирования бургер-меню */
+  font-family: 'K2D', sans-serif;
+
+
+}
+
+
+nav {
+  display: flex;
+  justify-content: space-between; /* Распределяем элементы меню */
+  width: 50%;  /* Задаем ширину навигации, чтобы отступы между элементами были */
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-left: 10px; /* Отступ между пунктами меню */
+}
+
+nav ul li:first-child {
+  margin-left: 0; /* Убираем отступ у первой ссылки */
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Логотип */
+header .logo img {
+  height: 50px; /* Высота логотипа */
+  margin-bottom: 10px; /* Отступ между логотипом и меню */
+}
+
+/* Стили для навигации */
+nav ul {
+  display: flex;
+  justify-content: space-between; /* Распределение по ширине */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+nav ul li {
+  margin: 0 10px; /* Отступы между ссылками */
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Стили для бургер-меню */
+.burger {
+  display: none; /* Скрываем бургер по умолчанию */
+  flex-direction: column;
+  cursor: pointer;
+  position: absolute;
+  top: 20px; /* Расположение бургер-меню */
+  right: 20px;
+}
+
+.burger-line {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 4px 0;
+}
+
+/* Медиазапрос для маленьких экранов */
+@media (max-width: 768px) {
+  /* Скрываем навигацию на маленьких экранах */
+  nav {
+    display: none;
+  }
+
+  /* Показываем бургер-меню */
+  .burger {
+    display: flex;
+  }
+
+  /* При открытии меню показываем ссылки */
+  nav.open {
+    display: block;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background-color: #164C8A;
+    width: 100%;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  /* Стили для элементов меню внутри бургер-меню */
+  nav.open ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav.open ul li {
+    margin-bottom: 15px;
+  }
+
+  nav.open ul li a {
+    font-size: 18px;
+  }
+}
+
+
+
+
+
+
+/* Основной контейнер (делим экран на 2 части) */
+.info-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Левая половина (с текстом) */
+.info-text {
+  width: 50%; /* 50% ширины экрана */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
+  background-color: #262B32; /* Черный фон для левой половины */
+  color: white; /* Белый цвет текста */
+  text-align: left;
+  font-size: 16px; /* Начальный размер шрифта */
+}
+
+/* Медиа-запросы для адаптации шрифта */
+@media (max-width: 1200px) {
+  .info-text {
+    font-size: 16px; /* Уменьшаем размер шрифта на экранах меньше 1200px */
+  }
+}
+
+@media (max-width: 900px) {
+  .info-text {
+    font-size: 14px; /* Уменьшаем размер шрифта на экранах меньше 900px */
+  }
+}
+
+@media (max-width: 600px) {
+  .info-text {
+    font-size: 12px; /* Уменьшаем размер шрифта на экранах меньше 600px */
+  }
+}
+.yagoda{
+  width: 100%;/* Задаем ширину картинки */
+  max-height: 65%; /* Задаем высоту картинки */
+  border-radius: 20px; /* Закругляем углы */
+}
+
+/* Правая половина (фон-картинка) */
+.info-bg {
+  width: 50%; /* 50% экрана */
+  background-image: url('/Collage.png'); 
+  background-size: cover;
+  background-position: center; 
+  background-color: black;
+  position: relative; /* Для позиционирования элементов поверх фона */
+}
+
+/* Первый контейнер для иконки (позиционирование первой иконки) */
+.icon1-container {
+  position: absolute;
+  top: 15%; /* Позиционируем иконку по вертикали */
+  left: 50%; /* Позиционируем иконку по горизонтали */
+
+  max-width: 80%;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Второй контейнер для иконки (позиционирование второй иконки) */
+.icon2-container {
+  position: absolute;
+  top: 15%; /* Позиционируем вторую иконку по вертикали */
+  left: 5%; /* Позициоируем вторую иконку по горизонтали */
+  max-width: 80%;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Стили для картинок */
+.icon {
+  
+max-width: 100%;
+  height: auto;
+  margin: 10px;
+}
+
+/* Контейнер с номером и ссылками */
+.info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7vh;
+  background-color: #262B32;
+  padding: 10px;
+  color: white;
+  display: flex;
+  flex-direction: row; /* Горизонтально по умолчанию */
+  justify-content: space-around; /* Равномерное распределение */
+  align-items: center;
+  margin: 0;
+  gap: 20px; /* Добавляем расстояние между элементами */
+}
+
+/* Стили для ссылок и номера */
+.info-overlay a,
+.info-overlay .phone-number {
+  color: white;
+  text-decoration: none;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.info-overlay a:hover {
+  text-decoration: underline;
+}
+
+/* Адаптивное уменьшение шрифта */
+@media (max-width: 1024px) {
+  .info-overlay a,
+  .info-overlay .phone-number {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-overlay {
+    flex-direction: column; /* Переключаемся в столбец */
+    height: auto;
+    padding: 15px 0;
+  }
+
+  .info-overlay a,
+  .info-overlay .phone-number {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-overlay a,
+  .info-overlay .phone-number {
+    font-size: 10px;
+  }
+}
