@@ -44,7 +44,7 @@ function Header() {
       <nav ref={menuRef} className={menuOpen ? "open" : ""}>
         <ul>
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
-          <li><Link to="/cart" onClick={closeMenu}>Cart</Link></li>
+
           <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
         </ul>
       </nav>

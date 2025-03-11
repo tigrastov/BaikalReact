@@ -32,7 +32,7 @@ function Info() {
       <div className="info-overlay">
       <span class="phone-number">+7 (999) 123-45-67</span>
           <p>
-            <a href="https://telegram.org/" target="_blank" rel="noopener noreferrer"> Telegram</a>
+            <a href="https://telegram.org/" target="_blank" rel="noopener noreferrer"><p>Telegram</p></a>
             </p>
           <p><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></p>
         </div>

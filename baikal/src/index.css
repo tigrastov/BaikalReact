@@ -83,14 +83,31 @@ nav ul li a:hover {
   text-decoration: underline;
 }
 
+
+
+nav.open {
+  display: block;
+  position: absolute; /* Позиционирование поверх остальных элементов */
+  top: 70px; /* Отступ сверху от хедера */
+  left: 0;
+  right: 0;
+  background-color: #164C8A;
+  width: 100%;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 100; /* Меню будет поверх контента */
+}
+
+
 /* Стили для бургер-меню */
 .burger {
-  display: none; /* Скрываем бургер по умолчанию */
+  display: flex;
   flex-direction: column;
   cursor: pointer;
-  position: absolute;
-  top: 20px; /* Расположение бургер-меню */
+  position: absolute; /* Позиционируем бургер-меню в правом верхнем углу */
+  top: 20px;
   right: 20px;
+  z-index: 101; /* Бургер будет поверх меню */
 }
 
 .burger-line {
@@ -99,7 +116,17 @@ nav ul li a:hover {
   background-color: white;
   margin: 4px 0;
 }
+/* Медиазапрос для больших экранов, чтобы скрыть бургер-меню */
+@media (min-width: 768px) {
+  .burger {
+    display: none; /* Скрыть бургер-меню на экранах шире 768px */
+  }
 
+  /* Отображение меню на экранах больше 768px */
+  nav {
+    display: flex;
+  }
+}
 /* Медиазапрос для маленьких экранов */
 @media (max-width: 768px) {
   /* Скрываем навигацию на маленьких экранах */
@@ -288,5 +315,252 @@ max-width: 100%;
   .info-overlay a,
   .info-overlay .phone-number {
     font-size: 10px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Стиль для каталога */
+.catalog {
+  background-image: url('/bgCatalog.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat-y;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-bottom: 20px;
+}
+
+.catalog-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 300px минимальный размер карточки */
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 100px;
+}
+
+.product-card {
+  background-image: url('/bgCatalog.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.product-name {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.product-description {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.add-to-cart {
+  color: #F54A4A;
+  background-color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.add-to-cart:hover {
+  background-color: #F54A4A;
+  color: white;
+}
+
+/* Стиль для корзины (горизонтальный контент в карточках) */
+.cart-items {
+  display: flex;
+  flex-direction: column; /* Вертикальное расположение для корзины */
+  gap: 10px;
+  padding: 20px;
+  max-width: 100%; /* Корзина будет адаптироваться под ширину экрана */
+  margin-top: 30px; /* Чтобы корзина не перекрывала товары */
+}
+
+.cart-item {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 20px;
+  padding: 10px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.cart-item-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: black;
+}
+
+.cart-item-price {
+  font-size: 1.1em;
+  color:white;
+}
+
+.cart-item-description {
+  font-size: 0.9em;
+  color: black;
+}
+
+.cart-item-remove {
+  color: #F54A4A;
+  cursor: pointer;
+  border-radius: 15px;
+  background-color: white;
+  padding: 1px 5px;
+  font-size: 12px; 
+  border: none;
+}
+
+.add-to-cart {
+  background-color: #2d9cdb;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.add-to-cart p {
+  margin: 0;
+}
+
+.cart-items {
+  margin-top: 20px;
+}
+
+.cart-item-details {
+  margin-left: 10px;
+}
+
+
+.cart{
+  color: white;
+}
+
+/* Адаптивность для каталога и корзины */
+@media (max-width: 768px) {
+  .catalog-container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Уменьшаем размер карточек */
+  }
+
+  .cart-items {
+    padding: 10px;
+  }
+
+  .product-card {
+    padding: 15px; /* Уменьшаем отступы в карточках */
+  }
+
+  .product-image {
+    height: 150px; /* Уменьшаем высоту картинок в маленьком экране */
+  }
+
+  .cart-item {
+    flex-direction: column; /* Вертикальное расположение карт в корзине */
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart-item-image {
+    width: 100px; /* Увеличиваем картинки в корзине */
+    height: 100px;
+  }
+
+  .cart-item-details {
+    margin-left: 0;
+  }
+
+  .product-name, .cart-item-name {
+    font-size: 1em;
+  }
+
+  .product-price, .cart-item-price {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Еще меньше для очень узких экранов */
+  }
+
+  .product-card {
+    padding: 10px; /* Еще меньше отступы */
+  }
+
+  .product-image {
+    height: 120px; /* Еще меньше картинки на очень узких экранах */
+  }
+
+  .cart-item-image {
+    width: 80px;
+    height: 80px;
   }
 }
