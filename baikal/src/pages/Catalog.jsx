@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import Cart from "./Cart";  // Подключаем компонент Cart
+
 import { CartContext } from '../CartContext.jsx'; // если в корне папки src // указываем .jsx // правильный путь, если файл в той же папке
 // Данные товаров с уникальными значениями
 const products = [
@@ -82,8 +83,25 @@ const products = [
   },
 ];
 
+
+
 function Catalog() {
   const [cart, setCart] = useState([]);
+
+  // Загружаем корзину из localStorage при первом рендере
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart"));
+    if (storedCart) {
+      setCart(storedCart);
+    }
+  }, []);
+
+  // Сохраняем корзину в localStorage, когда она изменяется
+  useEffect(() => {
+    if (cart.length > 0) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   // Добавляем товар в корзину
   const addToCart = (product) => {
@@ -92,7 +110,8 @@ function Catalog() {
 
   // Удаляем товар из корзины
   const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
+    const updatedCart = cart.filter(item => item.id !== id);
+    setCart(updatedCart);
   };
 
   return (

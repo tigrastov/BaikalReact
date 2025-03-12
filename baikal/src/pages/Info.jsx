@@ -1,7 +1,6 @@
 import foto from '/yagoda.jpg'; // Импорт картинки
 
 
-
 function Info() {
   return (
     <div className="info-container">
@@ -30,11 +29,25 @@ function Info() {
 
       <div className="info-bg">
       <div className="info-overlay">
-      <span class="phone-number">+7 (999) 123-45-67</span>
-          <p>
-            <a href="https://telegram.org/" target="_blank" rel="noopener noreferrer"><p>Telegram</p></a>
-            </p>
-          <p><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></p>
+      <p>
+  <span className="phone-number" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
+    <img src="public/phone.png" alt="Phone" width="20" height="20" />
+    0677109599
+  </span>
+</p>
+      <p>
+  <a href="https://telegram.org/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
+    <img src="/telega.png" alt="Telegram" width="20" height="20" />
+    <span>Telegram</span>
+  </a>
+</p>
+
+<p>
+  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '5px', textDecoration: 'none' }}>
+    <img src="/insta.png" alt="Instagram" width="20" height="20" />
+    <span>Instagram</span>
+  </a>
+</p>
         </div>
         {/* Первый контейнер для иконки */}
         <div className="icon1-container">
