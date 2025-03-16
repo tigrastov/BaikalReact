@@ -1,5 +1,8 @@
 import React from "react";
-import { CartContext } from '../CartContext.jsx'; // если в корне папки src // указываем .jsx // правильный путь, если файл в той же папке
+// Cart.jsx
+// Catalog.jsx
+import CartContext from '../CartContext'; // Импорт по умолчанию
+
 function Cart({ cart, removeFromCart }) {
   return (
     <div className="cart">

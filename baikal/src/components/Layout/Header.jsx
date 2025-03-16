@@ -1,34 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-function Header() {
+function Header({ openAuthModal }) {  // Принимаем openAuthModal как пропс
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);  // Ссылка на меню
-  const burgerRef = useRef(null);  // Ссылка на бургер-меню
+  const menuRef = useRef(null);
+  const burgerRef = useRef(null);
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);  // Переключение состояния меню
+    setMenuOpen(!menuOpen);
   };
 
   const closeMenu = () => {
-    setMenuOpen(false);  // Закрытие меню
+    setMenuOpen(false);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Проверяем, был ли клик вне меню и вне бургер-меню
       if (
         menuRef.current && !menuRef.current.contains(event.target) &&
         burgerRef.current && !burgerRef.current.contains(event.target)
       ) {
-        closeMenu();  // Закрыть меню, если клик был вне
+        closeMenu();
       }
     };
 
-    // Добавляем обработчик события
     document.addEventListener('click', handleClickOutside);
 
-    // Убираем обработчик при размонтировании компонента
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
@@ -40,16 +37,15 @@ function Header() {
         <img src="/Logotip.png" alt="Logo" />
       </div>
 
-      {/* Открытое меню или бургер */}
       <nav ref={menuRef} className={menuOpen ? "open" : ""}>
         <ul>
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
-
+          <li><Link to="/orders" onClick={closeMenu}>Orders</Link></li>
           <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
+          <li><button onClick={openAuthModal}>Auth</button></li>  {/* Используем openAuthModal из пропсов */}
         </ul>
       </nav>
 
-      {/* Бургер-меню */}
       <div className="burger" ref={burgerRef} onClick={toggleMenu}>
         <div className="burger-line"></div>
         <div className="burger-line"></div>
