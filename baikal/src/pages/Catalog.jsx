@@ -1,141 +1,123 @@
-import React, { useState , useEffect} from "react";
-import Cart from "./Cart";  // Подключаем компонент Cart
-
-import { CartContext } from '../CartContext.jsx'; // если в корне папки src // указываем .jsx // правильный путь, если файл в той же папке
-// Данные товаров с уникальными значениями
-const products = [
-  {
-    id: Math.random(),
-    name: "Пельмени Свинина/Говядина",
-    price: "1290 din",
-    description: "Заморозка 1кг",
-    image: "пельмениСвининаГовядина.png",
-  },
-  {
-    id: Math.random(),
-    name: "Пельмени: Говядина",
-    price: "1590 din",
-    description: "Заморозка 1кг",
-    image: "пельмениГовядина.png",
-  },
-  {
-    id: Math.random(),
-    name: "Вареники: Творог",
-    price: "1290 din",
-    description: "Заморозка 1кг",
-    image: "вареникиТворог.png",
-  },
-  {
-    id: Math.random(),
-    name: "Вареники: Картофель/лук",
-    price: "1190 din",
-    description: "Заморозка 1кг",
-    image: "вареникиКартофельЛук.png",
-  },
-  {
-    id: Math.random(),
-    name: "Вареники: Картофель/Грибы",
-    price: "1390 din",
-    description: "Картофель/Грибы(шампиньоны, белый гриб) Заморозка 1кг",
-    image: "вареникиКартофельГрибы.png",
-  },
-  {
-    id: Math.random(),
-    name: "Вареники: Вишня",
-    price: "1290 din",
-    description: "Заморозка 1кг",
-    image: "вареникиВишня.png",
-  },
-  {
-    id: Math.random(),
-    name: "Блины: Яблоко/Корица",
-    price: "690 din",
-    description: "Упаковка 7 шт",
-    image: "блиныЯблокоКорица.png",
-  },
-  {
-    id: Math.random(),
-    name: "Блины с творогом",
-    price: "690 din",
-    description: "Упаковка 7 шт",
-    image: "блиныТворог.png",
-  },
-  {
-    id: Math.random(),
-    name: "Блины с курицей и грибами",
-    price: "850 din",
-    description: "Упаковка 7 шт",
-    image: "блиныКурицаГрибы.png",
-  },
-  {
-    id: Math.random(),
-    name: "Морковь по-корейски",
-    price: "195 din",
-    description: "Упаковка 250 грамм",
-    image: "public/морковьПоКорейски.png",
-  },
-  {
-    id: Math.random(),
-    name: "Торт Медовик",
-    price: "2500 din",
-    description: "Целый торт 1кг. По предзаказу",
-    image: "Медовик.png",
-  },
-];
-
-
+import React, { useState, useEffect, useContext } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../firebase"; // Импортируем Firebase
+import placeholderImage from "../assets/placeholder.jpg"; // Локальная заглушка
+import { CartContext } from "../CartContext"; // Импортируем контекст корзины
 
 function Catalog() {
-  const [cart, setCart] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Загружаем корзину из localStorage при первом рендере
+  // Используем контекст корзины
+  const { cart, addToCart, removeFromCart } = useContext(CartContext);
+
+  // Загружаем данные о товарах из Firestore
   useEffect(() => {
-    const storedCart = JSON.parse(localStorage.getItem("cart"));
-    if (storedCart) {
-      setCart(storedCart);
-    }
+    const fetchProducts = async () => {
+      try {
+        const productsCollection = collection(db, "products");
+        const productsSnapshot = await getDocs(productsCollection);
+
+        if (productsSnapshot.empty) {
+          setError("No products found.");
+          setLoading(false);
+          return;
+        }
+
+        const productsData = await Promise.all(
+          productsSnapshot.docs.map(async (doc) => {
+            const product = doc.data();
+            let imageUrl;
+            try {
+              // Получаем URL изображения из Firebase Storage, используя ID продукта
+              const imageRef = ref(storage, `products/${product.id}`);
+              imageUrl = await getDownloadURL(imageRef);
+            } catch (error) {
+              console.error(`Image not found for product ${product.id}:`, error);
+              // Используем локальную заглушку
+              imageUrl = placeholderImage;
+            }
+            return { ...product, id: doc.id, imageUrl };
+          })
+        );
+
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setError("Failed to load products. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
-  // Сохраняем корзину в localStorage, когда она изменяется
-  useEffect(() => {
-    if (cart.length > 0) {
-      localStorage.setItem("cart", JSON.stringify(cart));
-    }
-  }, [cart]);
+  if (loading) {
+    return <div>Loading...</div>; // Показываем загрузку, пока данные не загружены
+  }
 
-  // Добавляем товар в корзину
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
-
-  // Удаляем товар из корзины
-  const removeFromCart = (id) => {
-    const updatedCart = cart.filter(item => item.id !== id);
-    setCart(updatedCart);
-  };
+  if (error) {
+    return <div className="error-message">{error}</div>; // Показываем сообщение об ошибке
+  }
 
   return (
     <div className="catalog">
+      {/* Контейнер для каталога товаров */}
       <div className="catalog-container">
         {products.map((product) => (
           <div key={product.id} className="product-card">
             <img
-              src={product.image}
-              alt={product.name}
+              src={product.imageUrl}
+              alt={product.title}
               className="product-image"
+              onError={(e) => {
+                e.target.src = placeholderImage; // Заглушка, если изображение не загрузилось
+              }}
             />
-            <h3 className="product-name">{product.name}</h3>
-            <p className="product-price">{product.price}</p>
-            <p className="product-description">{product.description}</p>
-            <button className="add-to-cart" onClick={() => addToCart(product)}>
+            <h3 className="product-name">{product.title}</h3>
+            <p className="product-price">{product.price} din</p>
+            <p className="product-description">{product.descript}</p>
+            <button
+              className="add-to-cart"
+              onClick={() => addToCart(product)} // Добавляем товар в корзину
+              aria-label={`Add ${product.title} to cart`}
+            >
               <p>Add to Cart</p>
             </button>
           </div>
         ))}
       </div>
 
-      {/* Передаем корзину в компонент Cart */}
-      <Cart cart={cart} removeFromCart={removeFromCart} />
+      {/* Корзина, отображаемая справа */}
+      <div className="cart-sidebar">
+        <h2>Cart</h2>
+        {cart.length === 0 ? (
+          <p>Your cart is empty</p>
+        ) : (
+          <div className="cart-items">
+            {cart.map((item) => (
+              <div key={item.cartId} className="cart-item">
+                <img src={item.imageUrl} alt={item.title} className="cart-item-image" />
+                <div className="cart-item-details">
+                  <h3 className="cart-item-name">{item.title}</h3>
+                  <p className="cart-item-price">{item.price} din</p>
+                  <p className="cart-item-description">{item.descript}</p>
+                </div>
+                <button
+                  className="cart-item-remove"
+                  onClick={() => removeFromCart(item.cartId)} // Удаляем товар из корзины
+                  aria-label={`Remove ${item.title} from cart`}
+                >
+                  <p>Delete</p>
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

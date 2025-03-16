@@ -1,17 +1,32 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 // Создаем контекст для корзины
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  // Загружаем корзину из localStorage при инициализации
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
+  // Сохраняем корзину в localStorage при каждом изменении
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // Функция для добавления товара в корзину
   const addToCart = (product) => {
-    setCart([...cart, product]);
+    const cartItem = {
+      ...product,
+      cartId: `${product.id}-${Date.now()}`, // Уникальный идентификатор
+    };
+    setCart([...cart, cartItem]);
   };
 
-  const removeFromCart = (id) => {
-    setCart(cart.filter(item => item.id !== id));
+  // Функция для удаления товара из корзины
+  const removeFromCart = (cartId) => {
+    setCart(cart.filter((item) => item.cartId !== cartId));
   };
 
   return (

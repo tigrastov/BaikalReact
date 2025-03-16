@@ -1,9 +1,10 @@
-import React from "react";
-// Cart.jsx
-// Catalog.jsx
-import CartContext from '../CartContext'; // Импорт по умолчанию
+import React, { useContext } from "react";
+import { CartContext } from "../CartContext"; // Импортируем контекст корзины
 
-function Cart({ cart, removeFromCart }) {
+function Cart() {
+  // Используем контекст корзины
+  const { cart, removeFromCart } = useContext(CartContext);
+
   return (
     <div className="cart">
       <h1>Cart</h1>
@@ -12,16 +13,17 @@ function Cart({ cart, removeFromCart }) {
       ) : (
         <div className="cart-items">
           {cart.map((item) => (
-            <div key={item.id} className="cart-item">
-              <img src={item.image} alt={item.name} className="cart-item-image" />
+            <div key={item.cartId} className="cart-item">
+              <img src={item.imageUrl} alt={item.title} className="cart-item-image" />
               <div className="cart-item-details">
-                <h3 className="cart-item-name">{item.name}</h3>
-                <p className="cart-item-price">{item.price}</p>
-                <p className="cart-item-description">{item.description}</p>
+                <h3 className="cart-item-name">{item.title}</h3>
+                <p className="cart-item-price">{item.price} din</p>
+                <p className="cart-item-description">{item.descript}</p>
               </div>
               <button
                 className="cart-item-remove"
-                onClick={() => removeFromCart(item.id)} // Удаляем товар
+                onClick={() => removeFromCart(item.cartId)} // Удаляем товар из корзины
+                aria-label={`Remove ${item.title} from cart`}
               >
                 <p>Delete</p>
               </button>
@@ -32,6 +34,5 @@ function Cart({ cart, removeFromCart }) {
     </div>
   );
 }
-
 
 export default Cart;

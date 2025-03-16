@@ -1,36 +1,57 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
 import Header from "./components/Layout/Header";
 import Catalog from "./pages/Catalog";
-import Cart from "./pages/Cart";
 import Info from "./pages/Info";
 import Orders from "./pages/Orders";
 import Auth from "./pages/Auth";
 import { CartProvider } from "./CartContext"; // Провайдер корзины
 import { AuthProvider } from "./AuthContext"; // Провайдер авторизации
-import React, { useState } from "react";
+import ErrorBoundary from "./ErrorBoundary"; // Компонент для обработки ошибок
 
 function App() {
+  // Состояние для управления модальным окном авторизации
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Функция для открытия модального окна
   const openAuthModal = () => setIsModalOpen(true);
+
+  // Функция для закрытия модального окна
   const closeAuthModal = () => setIsModalOpen(false);
 
   return (
-    <AuthProvider> {/* Добавляем AuthProvider */}
+    // Оборачиваем всё в AuthProvider для управления авторизацией
+    <AuthProvider>
+      {/* Оборачиваем всё в CartProvider для управления корзиной */}
       <CartProvider>
+        {/* Оборачиваем всё в Router для маршрутизации */}
         <Router>
-          <Header openAuthModal={openAuthModal} /> {/* Передаем функцию для открытия модального окна в Header */}
+          {/* Хедер с возможностью открыть модальное окно авторизации */}
+          <Header openAuthModal={openAuthModal} />
+
+          {/* Основной контент страницы */}
           <main>
-            <Routes>
-              <Route path="/catalog" element={<Catalog />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/info" element={<Info />} />
-            </Routes>
+            {/* Оборачиваем Routes в ErrorBoundary для обработки ошибок */}
+            <ErrorBoundary>
+              <Routes>
+                {/* Маршрут для каталога */}
+                <Route path="/catalog" element={<Catalog />} />
+
+                {/* Маршрут для заказов */}
+                <Route path="/orders" element={<Orders />} />
+
+                {/* Маршрут для информации */}
+                <Route path="/info" element={<Info />} />
+              </Routes>
+            </ErrorBoundary>
           </main>
 
           {/* Модальное окно для авторизации */}
-          {isModalOpen && <Auth closeAuthModal={closeAuthModal} />} {/* Показываем Auth при открытом состоянии модального окна */}
+          {isModalOpen && (
+            <ErrorBoundary>
+              <Auth closeAuthModal={closeAuthModal} />
+            </ErrorBoundary>
+          )}
         </Router>
       </CartProvider>
     </AuthProvider>
