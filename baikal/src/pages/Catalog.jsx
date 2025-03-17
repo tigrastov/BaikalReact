@@ -4,6 +4,7 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../firebase"; // Импортируем Firebase
 import placeholderImage from "../assets/placeholder.jpg"; // Локальная заглушка
 import { CartContext } from "../CartContext"; // Импортируем контекст корзины
+import LoadingScreen from "./LoadingScreen"; // Импортируем компонент загрузки
 
 function Catalog() {
   const [products, setProducts] = useState([]);
@@ -56,7 +57,7 @@ function Catalog() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Показываем загрузку, пока данные не загружены
+    return <LoadingScreen />; // Показываем картинку загрузки
   }
 
   if (error) {

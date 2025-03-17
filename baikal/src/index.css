@@ -670,3 +670,26 @@ max-width: 100%;
 
 
 
+
+
+
+
+
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #164c8a; /* Фоновый цвет */
+}
+
+.loading-image {
+  width: 100%; /* Ширина на весь экран */
+  height: 100%; /* Высота на весь экран */
+  object-fit: cover; /* Чтобы картинка заполняла экран без искажений */
+}

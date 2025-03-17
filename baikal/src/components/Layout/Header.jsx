@@ -40,7 +40,7 @@ function Header({ openAuthModal }) {  // Принимаем openAuthModal как
       <nav ref={menuRef} className={menuOpen ? "open" : ""}>
         <ul>
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
-          <li><Link to="/orders" onClick={closeMenu}>Orders</Link></li>
+          <li><Link to="/orders" onClick={closeMenu}>My orders</Link></li>
           <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
           <li><button onClick={openAuthModal}>Auth</button></li>  {/* Используем openAuthModal из пропсов */}
         </ul>
