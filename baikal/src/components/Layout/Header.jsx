@@ -1,10 +1,16 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import Cart from "../../pages/Cart.jsx";
+import { CartContext } from '../../CartContext'; // Импортируем контекст корзины
 
-function Header({ openAuthModal }) {  // Принимаем openAuthModal как пропс
+function Header({ openAuthModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const menuRef = useRef(null);
   const burgerRef = useRef(null);
+
+  // Используем контекст корзины
+  const { cart } = useContext(CartContext);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -12,6 +18,10 @@ function Header({ openAuthModal }) {  // Принимаем openAuthModal как
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const toggleCart = () => {
+    setCartOpen(!cartOpen);
   };
 
   useEffect(() => {
@@ -39,10 +49,21 @@ function Header({ openAuthModal }) {  // Принимаем openAuthModal как
 
       <nav ref={menuRef} className={menuOpen ? "open" : ""}>
         <ul>
+        <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
           <li><Link to="/orders" onClick={closeMenu}>My orders</Link></li>
-          <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
-          <li><button onClick={openAuthModal}>Auth</button></li>  {/* Используем openAuthModal из пропсов */}
+          
+          
+          <li>
+            <button onClick={toggleCart} className="cart-button">
+              Cart
+              {/* Красный кружок с количеством товаров */}
+              {cart.length > 0 && (
+                <span className="cart-count">{cart.length}</span>
+              )}
+            </button>
+          </li>
+          <li><button onClick={openAuthModal}>Auth</button></li>
         </ul>
       </nav>
 
@@ -50,6 +71,15 @@ function Header({ openAuthModal }) {  // Принимаем openAuthModal как
         <div className="burger-line"></div>
         <div className="burger-line"></div>
         <div className="burger-line"></div>
+      </div>
+
+      {/* Затемнение фона */}
+      {cartOpen && <div className="cart-overlay" onClick={toggleCart}></div>}
+
+      {/* Сайдбар корзины */}
+      <div className={`cart-sidebar ${cartOpen ? "open" : ""}`}>
+        <Cart />
+        <button className="close-cart" onClick={toggleCart}>×</button>
       </div>
     </header>
   );

@@ -36,7 +36,10 @@ nav ul {
 }
 
 nav ul li {
-  margin-left: 10px; /* Отступ между пунктами меню */
+  margin: 0 10px; /* Отступы между пунктами меню */
+  display: flex;
+  align-items: center; /* Выравниваем элементы по центру по вертикали */
+
 }
 
 nav ul li:first-child {
@@ -628,13 +631,78 @@ max-width: 100%;
   gap: 20px;
 }
 
-.cart-sidebar {
-  flex: 1;
-  padding: 20px;
-  color: white;
 
-  border-left: 1px solid none;
+/* Стили для сайдбара корзины */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px; /* Скрываем сайдбар за пределами экрана */
+  width: 400px; /* Ширина сайдбара */
+  height: 100vh; /* Высота на весь экран */
+  background-color: rgba(22, 76, 138, 0.5); /* Фоновый цвет */
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out; /* Анимация выезжания */
+  z-index: 1000; /* Убедимся, что сайдбар поверх других элементов */
+  border-radius: 20px;
+  padding: 10px;
 }
+
+/* Класс для открытого сайдбара */
+.cart-sidebar.open {
+  right: 0; /* Показываем сайдбар */
+}
+
+/* Кнопка закрытия сайдбара */
+.close-cart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Затемнение фона при открытой корзине */
+.cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999; /* Под сайдбаром, но поверх остального контента */
+}
+
+
+/* Стили для кнопки корзины */
+.cart-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+}
+
+/* Красный кружок с количеством товаров */
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+
 
 .cart-item {
   display: flex;
@@ -665,6 +733,30 @@ max-width: 100%;
 .cart-item-remove:hover {
   background-color: #F54A4A;
 }
+
+.checkout-button {
+  background-color: #2d9cdb; /* Зеленый цвет */
+  color: white;
+  border: none;
+  padding: 20px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.checkout-button:hover {
+  background-color: #45a049; /* Темно-зеленый при наведении */
+}
+
+
+
+
+
+
+
+
+
 
 
 
