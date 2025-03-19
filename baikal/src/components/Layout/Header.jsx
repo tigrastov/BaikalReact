@@ -49,11 +49,9 @@ function Header({ openAuthModal }) {
 
       <nav ref={menuRef} className={menuOpen ? "open" : ""}>
         <ul>
-        <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
+          <li><Link to="/info" onClick={closeMenu}>Info</Link></li>
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
           <li><Link to="/orders" onClick={closeMenu}>My orders</Link></li>
-          
-          
           <li>
             <button onClick={toggleCart} className="cart-button">
               Cart
@@ -78,7 +76,7 @@ function Header({ openAuthModal }) {
 
       {/* Сайдбар корзины */}
       <div className={`cart-sidebar ${cartOpen ? "open" : ""}`}>
-        <Cart />
+        <Cart openAuthModal={openAuthModal} /> {/* Передаем openAuthModal в Cart */}
         <button className="close-cart" onClick={toggleCart}>×</button>
       </div>
     </header>

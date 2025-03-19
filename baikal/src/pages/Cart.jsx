@@ -1,86 +1,135 @@
-import React, { useContext } from "react";
-import { CartContext } from "../CartContext"; // Импортируем контекст корзины
-import { useAuth } from "../AuthContext"; // Импортируем useAuth
-import sendOrder from "../sendOrder";// Импортируем функцию отправки заказа
+import React, { useContext, useState } from "react";
+import { CartContext } from "../CartContext";
+import { useAuth } from "../AuthContext";
+import sendOrder from "../sendOrder";
+import { Order, Position } from "../models/models";
+import ConfirmationModal from "../components/ConfirmationModal"; // Импортируем компонент
 
-function Cart() {
-  // Используем контекст корзины
+function Cart({ openAuthModal }) {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
-  // Используем контекст авторизации
   const { user, isAuthenticated } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false); // Состояние для модального окна
 
-  // Функция для оформления заказа
+  const totalCost = cart.reduce((sum, item) => {
+    const price = Number(item.price); // Явное преобразование в число
+    const quantity = Number(item.quantity || 1); // Явное преобразование в число
+    return sum + price * quantity;
+  }, 0);
+
+
+  console.log("Cart items:", cart);
+console.log("Prices:", cart.map(item => item.price));
+console.log("Quantities:", cart.map(item => item.quantity || 1));
+
+
   const handleCheckout = async () => {
     if (!isAuthenticated) {
-      alert("Please log in to place an order.");
+      openAuthModal();
       return;
     }
 
-    // Подготовка данных заказа
+    if (!user?.uid) {
+      alert("User ID is missing. Please log in again.");
+      return;
+    }
+
+    // Показываем модальное окно
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmOrder = async () => {
+    setIsModalOpen(false); // Закрываем модальное окно
+
+    const positions = cart.map(
+      (item) =>
+        new Position(
+          `${item.id}-${Date.now()}`,
+          {
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            imageUrl: item.imageUrl,
+            descript: item.descript,
+          },
+          item.quantity || 1
+        )
+    );
+
     const orderData = {
-      userId: user.uid, // ID текущего пользователя
-      items: cart,
-      total: cart.reduce((sum, item) => sum + item.price, 0), // Сумма заказа
-      status: "pending", // Статус заказа
-      createdAt: new Date().toISOString(), // Дата создания заказа
+      userID: user.uid,
+      positions: positions,
+      cost: totalCost,
     };
 
     try {
-      // Отправка заказа
       const orderId = await sendOrder(orderData);
       alert(`Order placed successfully! Order ID: ${orderId}`);
-      clearCart(); // Очищаем корзину после успешного оформления
+      clearCart();
     } catch (error) {
+      console.error("Error placing order:", error);
       alert("Failed to place order. Please try again.");
     }
   };
 
-  // Логируем содержимое корзины для отладки
-  console.log("Cart items:", cart);
+  const handleCancelOrder = () => {
+    setIsModalOpen(false); // Закрываем модальное окно
+    console.log("Order canceled");
+  };
 
   return (
     <div className="cart">
       <h1>Cart</h1>
 
-      {/* Кнопка оформления заказа */}
-      {cart.length > 0 && (
-        <button onClick={handleCheckout} className="checkout-button">
-          Place Order
-        </button>
-      )}
-
-      {/* Отображение содержимого корзины */}
       {cart.length === 0 ? (
         <p>Your cart is empty</p>
       ) : (
-        <div className="cart-items">
-          {cart.map((item) => (
-            <div key={item.cartId} className="cart-item">
-              {/* Изображение товара */}
-              <img
-                src={item.imageUrl}
-                alt={item.title}
-                className="cart-item-image"
-              />
-
-              {/* Детали товара */}
-              <div className="cart-item-details">
-                <h3 className="cart-item-name">{item.title}</h3>
-                <p className="cart-item-price">{item.price} din</p>
-                <p className="cart-item-description">{item.descript}</p>
-              </div>
-
-              {/* Кнопка удаления товара */}
-              <button
-                className="cart-item-remove"
-                onClick={() => removeFromCart(item.cartId)} // Удаляем товар из корзины
-                aria-label={`Remove ${item.title} from cart`}
-              >
-                <p>Delete</p>
+        <>
+          <div className="cart-summary">
+            <p>Total Cost: {`${totalCost} din`}</p>
+            <div className="cart-actions">
+              <button onClick={handleCheckout} className="checkout-button">
+                Place Order
+              </button>
+              <button onClick={clearCart} className="clear-cart-button">
+                Clear Cart
               </button>
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="cart-items">
+            {cart.map((item) => (
+              <div key={item.cartId} className="cart-item">
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  className="cart-item-image"
+                />
+                <div className="cart-item-details">
+                  <h3 className="cart-item-name">{item.title}</h3>
+                  <p className="cart-item-price">{item.price} din</p>
+                  <p className="cart-item-description">{item.descript}</p>
+                  <p className="cart-item-quantity">Quantity: {item.quantity || 1}</p>
+                </div>
+                <button
+                  className="cart-item-remove"
+                  onClick={() => removeFromCart(item.cartId)}
+                  aria-label={`Remove ${item.title} from cart`}
+                >
+                  <p>Delete</p>
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Модальное окно подтверждения */}
+      {isModalOpen && (
+        <ConfirmationModal
+          message="Are you sure you want to place this order?"
+          onConfirm={handleConfirmOrder}
+          onCancel={handleCancelOrder}
+        />
       )}
     </div>
   );

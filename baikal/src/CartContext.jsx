@@ -29,8 +29,15 @@ export const CartProvider = ({ children }) => {
     setCart(cart.filter((item) => item.cartId !== cartId));
   };
 
+  // Функция для очистки корзины
+  const clearCart = () => {
+    setCart([]); // Очищаем корзину
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, clearCart }} // Добавляем clearCart в value
+    >
       {children}
     </CartContext.Provider>
   );
