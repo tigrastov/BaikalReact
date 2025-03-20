@@ -1,35 +1,24 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Cart from "../../pages/Cart.jsx";
-import { CartContext } from '../../CartContext'; // Импортируем контекст корзины
-import OrdersSidebar from "../../pages/OrdersSidebar"; // Импортируем компонент бокового меню заказов
+import { CartContext } from '../../CartContext';
+import { useAuth } from '../../AuthContext'; // Импортируем контекст авторизации
+import OrdersSidebar from "../../pages/OrdersSidebar";
 
 function Header({ openAuthModal }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
-  const [ordersOpen, setOrdersOpen] = useState(false); // Состояние для управления боковым меню заказов
+  const [ordersOpen, setOrdersOpen] = useState(false);
   const menuRef = useRef(null);
   const burgerRef = useRef(null);
 
-  // Используем контекст корзины
   const { cart } = useContext(CartContext);
+  const { user, isAdmin } = useAuth(); // Получаем пользователя и флаг isAdmin
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
-
-  const toggleCart = () => {
-    setCartOpen(!cartOpen);
-  };
-
-  const toggleOrders = () => {
-    console.log("Toggling orders sidebar. Current state:", ordersOpen); // Логируем состояние
-    setOrdersOpen(!ordersOpen);
-  };
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
+  const toggleCart = () => setCartOpen(!cartOpen);
+  const toggleOrders = () => setOrdersOpen(!ordersOpen);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,10 +31,7 @@ function Header({ openAuthModal }) {
     };
 
     document.addEventListener('click', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   return (
@@ -60,13 +46,18 @@ function Header({ openAuthModal }) {
           <li><Link to="/catalog" onClick={closeMenu}>Catalog</Link></li>
           <li>
             <button onClick={toggleOrders} className="link-style">
-              My Orders {/* Кнопка для открытия бокового меню заказов */}
+              My Orders
             </button>
           </li>
+          {/* Ссылка на админ-панель только для администратора */}
+          {isAdmin && (
+            <li>
+              <Link to="/admin" onClick={closeMenu}>Admin Panel</Link>
+            </li>
+          )}
           <li>
             <button onClick={toggleCart} className="cart-button link-style">
               Cart
-              {/* Красный кружок с количеством товаров */}
               {cart.length > 0 && (
                 <span className="cart-count">{cart.length}</span>
               )}
@@ -86,21 +77,15 @@ function Header({ openAuthModal }) {
         <div className="burger-line"></div>
       </div>
 
-      {/* Затемнение фона для корзины */}
       {cartOpen && <div className="cart-overlay" onClick={toggleCart}></div>}
-
-      {/* Сайдбар корзины */}
       <div className={`cart-sidebar ${cartOpen ? "open" : ""}`}>
-        <Cart openAuthModal={openAuthModal} /> {/* Передаем openAuthModal в Cart */}
+        <Cart openAuthModal={openAuthModal} />
         <button className="close-cart" onClick={toggleCart}>×</button>
       </div>
 
-      {/* Затемнение фона для заказов */}
       {ordersOpen && <div className="cart-overlay" onClick={toggleOrders}></div>}
-
-      {/* Сайдбар заказов */}
       <div className={`orders-sidebar ${ordersOpen ? "open" : ""}`}>
-        <OrdersSidebar isOpen={ordersOpen} onClose={toggleOrders} /> {/* Передаем isOpen и onClose */}
+        <OrdersSidebar isOpen={ordersOpen} onClose={toggleOrders} />
         <button className="close-orders" onClick={toggleOrders}>×</button>
       </div>
     </header>

@@ -13,9 +13,12 @@ import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, adminId }) => { // Добавляем adminId в пропсы
     const [user, setUser] = useState(null);
     const isAuthenticated = !!user;
+
+    // Проверяем, является ли пользователь администратором
+    const isAdmin = user?.uid === adminId;
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const newUser = userCredential.user;
-            const userProfile = { id: newUser.uid, name: "", phone: "", address: "" };
+            const userProfile = { id: newUser.uid, name: "", phone: "", address: "", role: "user" }; // Добавляем role по умолчанию
             await setDoc(doc(db, "users", newUser.uid), userProfile);
             setUser({ ...newUser, ...userProfile });
             return newUser;
@@ -91,7 +94,15 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated, signUp, signIn, logOut, updateUserProfile }}>
+        <AuthContext.Provider value={{ 
+            user, 
+            isAuthenticated, 
+            isAdmin, // Добавляем isAdmin в контекст
+            signUp, 
+            signIn, 
+            logOut, 
+            updateUserProfile 
+        }}>
             {children}
         </AuthContext.Provider>
     );
