@@ -21,6 +21,47 @@ header {
 
 }
 
+.link-style {
+  background: none; /* Убираем фон */
+  border: none; /* Убираем рамку */
+  padding: 0; /* Убираем отступы */
+  font-family: 'K2D', sans-serif;
+
+  font-size: inherit; /* Наследуем размер шрифта */
+  color: white; /* Цвет как у ссылки */
+  text-decoration: none; /* Подчеркивание */
+  cursor: pointer; /* Курсор в виде указателя */
+}
+
+.link-style:hover {
+
+  text-decoration: underline; 
+}
+.cart-button {
+  display: inline-flex; /* Используем inline-flex для выравнивания */
+  align-items: center; /* Выравниваем элементы по центру по вертикали */
+  background: none; /* Убираем фон */
+  border: none; /* Убираем рамку */
+  padding: 0; /* Убираем отступы */
+  font-family: 'K2D', sans-serif; /* Наследуем шрифт */
+  font-size: 16px; /* Размер текста */
+  color: white; /* Цвет текста */
+  text-decoration: none; /* Убираем подчеркивание */
+  cursor: pointer; /* Курсор в виде указателя */
+}
+
+.cart-button:hover {
+  text-decoration: underline; /* Подчеркивание при наведении */
+}
+
+.cart-count {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+
+  font-size: 12px;
+  margin-left: 5px;
+}
 
 nav {
   display: flex;
@@ -86,7 +127,9 @@ nav ul li a:hover {
   text-decoration: underline;
 }
 
-
+.orders-button{
+  background: none;
+}
 
 nav.open {
   display: block;
@@ -667,7 +710,7 @@ max-width: 100%;
 .cart-sidebar {
   position: fixed;
   top: 0;
-  right: -400px; /* Скрываем сайдбар за пределами экрана */
+  right: -500px; /* Скрываем сайдбар за пределами экрана */
   width: 400px; /* Ширина сайдбара */
   height: 100vh; /* Высота на весь экран */
   background-color: rgba(22, 76, 138, 0.5); /* Фоновый цвет */
@@ -872,3 +915,112 @@ max-width: 100%;
   height: 100%; /* Высота на весь экран */
   object-fit: cover; /* Чтобы картинка заполняла экран без искажений */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.orders-sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px; /* Меню скрыто за пределами экрана */
+  width: 400px;
+  height: 100%;
+  background-color: rgba(22, 76, 138, 0.5); /* Фоновый цвет */;
+  border-radius: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.orders-sidebar.open {
+  left: 0; /* Меню отображается */
+}
+
+.orders-sidebar-content {
+  padding: 20px;
+}
+
+.orders-list {
+  max-height: 800px; /* Фиксированная высота */
+  overflow-y: auto;  /* Включаем вертикальный скролл */
+  padding-right: 10px; /* Отступ для скроллбара */
+  border-radius: 20px;
+
+}
+
+.orders-list::-webkit-scrollbar {
+  width: 8px; /* Ширина скроллбара */
+}
+
+.orders-list::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Цвет фона скроллбара */
+  border-radius: 20px;
+}
+
+.orders-list::-webkit-scrollbar-thumb {
+  background: #888; /* Цвет ползунка скроллбара */
+  border-radius: 20px;
+}
+
+.orders-list::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Цвет ползунка при наведении */
+}
+
+.order-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius:20px;
+}
+
+.order-positions {
+  margin-top: 10px;
+}
+
+.position-item {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 20px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+
+.order-info{
+  background-color: #f1f1f1;
+  color: #164C8A;
+  padding: 5px;
+  border-radius: 20px;
+  margin-top: 100px;
+  font-family: 'K2D', sans-serif;
+  font-weight: 600;
+}
+
+
+
+
