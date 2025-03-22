@@ -10,26 +10,34 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        // Получаем все заказы из коллекции "orders"
+
         const ordersSnapshot = await getDocs(collection(db, "orders"));
         const ordersData = ordersSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
 
-        // Для каждого заказа получаем информацию о пользователе
-        const ordersWithUsers = await Promise.all(
+        // Для каждого заказа получаем информацию о пользователе и позициях
+        const ordersWithDetails = await Promise.all(
           ordersData.map(async (order) => {
+            // Получаем данные о пользователе
             const userDoc = await getDoc(doc(db, "users", order.userID));
             const userData = userDoc.data();
+
+            // Получаем позиции заказа из вложенной коллекции "position"
+            const positionsCollection = collection(db, "orders", order.id, "position");
+            const positionsSnapshot = await getDocs(positionsCollection);
+            const positionsData = positionsSnapshot.docs.map((posDoc) => posDoc.data());
+
             return {
               ...order,
               user: userData, // Добавляем данные о пользователе
+              positions: positionsData, // Добавляем данные о позициях
             };
           })
         );
 
-        setOrders(ordersWithUsers); // Обновляем состояние
+        setOrders(ordersWithDetails); // Обновляем состояние
       } catch (error) {
         console.error("Error fetching orders:", error);
         setError("Failed to load orders. Please try again.");
@@ -70,36 +78,61 @@ const AdminPanel = () => {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.user?.name || "N/A"}</td>
-              <td>{order.user?.email || "N/A"}</td>
-              <td>{order.user?.phone || "N/A"}</td>
-              <td>{order.user?.address || "N/A"}</td>
-              <td>
-                {order.positions ? (
-                  <ul>
-                    {order.positions.map((position) => (
-                      <li key={position.id}>
-                        <strong>{position.title}</strong> (x{position.count}) -{" "}
-                        {position.cost} din
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  "N/A"
-                )}
-              </td>
-              <td>{order.cost || "N/A"} din</td>
-              <td>{order.status || "N/A"}</td>
-              <td>
-                {order.date
-                  ? new Date(order.date.seconds * 1000).toLocaleString() // Преобразуем Timestamp в дату
-                  : "N/A"}
-              </td>
-            </tr>
-          ))}
+          {orders.map((order) => {
+            // Преобразуем дату в читаемый формат
+            let displayDate = "N/A";
+            if (order.date) {
+              // Если date — это объект Timestamp
+              if (typeof order.date.toDate === "function") {
+                displayDate = order.date.toDate().toLocaleString();
+              }
+              // Если date — это строка
+              else if (typeof order.date === "string") {
+                const parsedDate = new Date(order.date);
+                if (!isNaN(parsedDate.getTime())) {
+                  displayDate = parsedDate.toLocaleString();
+                }
+              }
+            }
+
+            return (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.user?.name || "N/A"}</td>
+                <td>{order.user?.email || "N/A"}</td>
+                <td>{order.user?.phone || "N/A"}</td>
+                <td>{order.user?.address || "N/A"}</td>
+                <td>
+                  {/* Проверяем, существует ли positions */}
+                  {order.positions && order.positions.length > 0 ? (
+                    <ul>
+                      {order.positions.map((position) => (
+                        <li key={position.id}>
+                          {/* Проверяем, существует ли product и его поля */}
+                          {position.product ? (
+                            <>
+                              <strong>{position.product.title}</strong> (x{position.count}) -{" "}
+                              {position.cost} din
+                            </>
+                          ) : (
+                            <>
+                              <strong>{position.title}</strong> (x{position.count}) -{" "}
+                              {position.cost} din
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No positions found."
+                  )}
+                </td>
+                <td>{order.cost || "N/A"} din</td>
+                <td>{order.status || "N/A"}</td>
+                <td>{displayDate}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
