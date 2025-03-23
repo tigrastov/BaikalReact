@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../firebase"; // Импортируем Firestore
-import { collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
-
+import { db, storage } from "../firebase"; // Импортируем Firestore и Storage
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  addDoc,
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const AdminPanel = () => {
   const [orders, setOrders] = useState([]); // Состояние для хранения заказов
@@ -11,6 +18,14 @@ const AdminPanel = () => {
   const [currentPage, setCurrentPage] = useState(1); // Текущая страница пагинации
   const [ordersPerPage] = useState(10); // Количество заказов на странице
 
+  // Состояния для добавления товара
+  const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
+  const [productLoading, setProductLoading] = useState(false);
+
+  // Загрузка заказов
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -28,9 +43,16 @@ const AdminPanel = () => {
             const userData = userDoc.data();
 
             // Получаем позиции заказа из вложенной коллекции "position"
-            const positionsCollection = collection(db, "orders", order.id, "position");
+            const positionsCollection = collection(
+              db,
+              "orders",
+              order.id,
+              "position"
+            );
             const positionsSnapshot = await getDocs(positionsCollection);
-            const positionsData = positionsSnapshot.docs.map((posDoc) => posDoc.data());
+            const positionsData = positionsSnapshot.docs.map((posDoc) =>
+              posDoc.data()
+            );
 
             return {
               ...order,
@@ -128,14 +150,55 @@ const AdminPanel = () => {
     }
   };
 
-  // Открытие модального окна
-  const openAddProductModal = () => {
-    setIsAddProductModalOpen(true);
+  // Обработчик изменения изображения
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
   };
 
-  // Закрытие модального окна
-  const closeAddProductModal = () => {
-    setIsAddProductModalOpen(false);
+  // Обработчик отправки формы добавления товара
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    setProductLoading(true);
+  
+    try {
+      if (!image) {
+        throw new Error("No image selected");
+      }
+  
+      // Генерируем уникальный ID для товара
+      const productId = crypto.randomUUID(); // или используйте библиотеку для генерации UUID
+  
+      // Загружаем изображение в Firebase Storage с именем, равным ID товара
+      const storageRef = ref(storage, `products/${productId}`);
+      await uploadBytes(storageRef, image);
+      const imageUrl = await getDownloadURL(storageRef);
+  
+      // Создаем объект товара
+      const product = {
+        id: productId,
+        title,
+        price: parseInt(price, 10),
+        descript: description,
+        imageUrl, // Сохраняем URL изображения
+        createdAt: new Date(),
+      };
+  
+      // Добавляем товар в Firestore
+      await addDoc(collection(db, "products"), product);
+  
+      console.log("Product added with ID: ", productId);
+      setIsAddProductModalOpen(false); // Закрываем модальное окно
+      setTitle(""); // Очищаем поля формы
+      setPrice("");
+      setDescription("");
+      setImage(null);
+    } catch (error) {
+      console.error("Error adding product: ", error);
+    } finally {
+      setProductLoading(false);
+    }
   };
 
   if (loading) {
@@ -150,7 +213,10 @@ const AdminPanel = () => {
     <div className="admin-panel">
       <div className="admin-header">
         <h1>Admin Panel</h1>
-        <button className="add-product-button" onClick={openAddProductModal}>
+        <button
+          className="add-product-button"
+          onClick={() => setIsAddProductModalOpen(true)}
+        >
           Add Product
         </button>
       </div>
@@ -187,13 +253,13 @@ const AdminPanel = () => {
                         <li key={`${order.id}-${position.id}-${index}`}>
                           {position.product ? (
                             <>
-                              <strong>{position.product.title}</strong> (x{position.count}) -{" "}
-                              {position.cost} din
+                              <strong>{position.product.title}</strong> (x
+                              {position.count}) - {position.cost} din
                             </>
                           ) : (
                             <>
-                              <strong>{position.title}</strong> (x{position.count}) -{" "}
-                              {position.cost} din
+                              <strong>{position.title}</strong> (x
+                              {position.count}) - {position.cost} din
                             </>
                           )}
                         </li>
@@ -205,7 +271,11 @@ const AdminPanel = () => {
                 </td>
                 <td>{order.cost || "N/A"} din</td>
                 <td>
-                  <span className={`status-${order.status.toLowerCase().replace(" ", "-")}`}>
+                  <span
+                    className={`status-${order.status
+                      .toLowerCase()
+                      .replace(" ", "-")}`}
+                  >
                     {order.status || "N/A"}
                   </span>
                 </td>
@@ -213,7 +283,9 @@ const AdminPanel = () => {
                   <select
                     value={order.status || "New"}
                     onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                    className={`status-select status-${order.status.toLowerCase().replace(" ", "-")}`}
+                    className={`status-select status-${order.status
+                      .toLowerCase()
+                      .replace(" ", "-")}`}
                   >
                     <option value="New">New</option>
                     <option value="In progress">In progress</option>
@@ -239,7 +311,9 @@ const AdminPanel = () => {
         </span>
         <button
           onClick={nextPage}
-          disabled={currentPage === Math.ceil(sortedOrders.length / ordersPerPage)}
+          disabled={
+            currentPage === Math.ceil(sortedOrders.length / ordersPerPage)
+          }
         >
           Next
         </button>
@@ -249,12 +323,48 @@ const AdminPanel = () => {
       {isAddProductModalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <button className="close-modal-button" onClick={closeAddProductModal}>
+            <button
+              className="close-modal-button"
+              onClick={() => setIsAddProductModalOpen(false)}
+            >
               &times;
             </button>
             <h2>Add Product</h2>
-            <p>This is where the product addition form will go.</p>
-            {/* Здесь можно добавить форму для добавления товара */}
+            <form onSubmit={handleAddProduct}>
+              <div>
+                <label>Title:</label>
+                <input
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Price:</label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Description:</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label>Image:</label>
+                <input type="file" onChange={handleImageChange} required />
+              </div>
+              <button type="submit" disabled={productLoading}>
+                {productLoading ? "Saving..." : "Save"}
+              </button>
+            </form>
           </div>
         </div>
       )}

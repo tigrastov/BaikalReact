@@ -38,8 +38,9 @@ function App() {
             <ErrorBoundary>
               <Routes>
                 {/* Основные роуты */}
-                <Route path="/catalog" element={<Catalog />} />
+                <Route path="/" element={<Info />} /> {/* Первая страница */}
                 <Route path="/info" element={<Info />} />
+                <Route path="/catalog" element={<Catalog />} />
 
                 {/* Защищенный роут для админ-панели */}
                 <Route
@@ -52,7 +53,7 @@ function App() {
                 />
 
                 {/* Редирект на главную для неизвестных путей */}
-                <Route path="*" element={<Navigate to="/catalog" />} />
+                <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </ErrorBoundary>
           </main>
@@ -71,7 +72,7 @@ function App() {
             </ErrorBoundary>
           )}
         </Router>
-      </CartProvider>ы
+      </CartProvider>
     </AuthProvider>
   );
 }

@@ -1289,51 +1289,71 @@ select:focus {
   color: #fff;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 1rem;
   margin-bottom: 20px;
 }
 
 .add-product-button:hover {
-  background-color: #e04343;
+  background-color: purple;
 }
 
-/* Стили для модального окна */
+
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .modal {
-  background-color: #fff;
+  background: white;
   padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
 }
 
 .close-modal-button {
-  background-color: #dc3545; /* Красный */
-  color: #fff;
+  float: right;
+  background: none;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  font-size: 1.5rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
 }
 
-.close-modal-button:hover {
-  background-color: #c82333; /* Темно-красный */
+form div {
+  margin-bottom: 15px;
 }
 
+form label {
+  display: block;
+  margin-bottom: 5px;
+}
 
+form input, form textarea {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+form button {
+  background: green;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
