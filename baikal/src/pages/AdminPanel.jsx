@@ -117,7 +117,7 @@ const AdminPanel = () => {
   return (
     <div className="admin-panel">
       <h1>Admin Panel</h1>
-      <p>Welcome to the admin panel!</p>
+
 
       {/* Таблица с заказами */}
       <table className="orders-table">

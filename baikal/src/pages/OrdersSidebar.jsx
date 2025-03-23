@@ -82,11 +82,11 @@ function OrdersSidebar({ isOpen, onClose }) {
           <p>Loading orders...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : sortedOrders.length === 0 ? ( // Используем sortedOrders
+        ) : sortedOrders.length === 0 ? (
           <p>No orders found.</p>
         ) : (
           <div className="orders-list">
-            {sortedOrders.map((order) => ( // Используем sortedOrders
+            {sortedOrders.map((order) => (
               <div key={order.id} className="order-item">
                 <h2>Order ID: {order.id}</h2>
                 <p>Date: {formatDate(order.date)}</p>
@@ -94,8 +94,11 @@ function OrdersSidebar({ isOpen, onClose }) {
                 <p>Total Cost: {order.cost} din</p>
                 <div className="order-positions">
                   <h3>Positions:</h3>
-                  {order.positions.map((position) => (
-                    <div key={position.id} className="position-item">
+                  {order.positions.map((position, index) => (
+                    <div
+                      key={`${order.id}-${position.id}-${index}`} // Уникальный ключ
+                      className="position-item"
+                    >
                       <p>Title: {position.title}</p>
                       <p>Price: {position.price} din</p>
                       <p>Quantity: {position.count}</p>

@@ -80,7 +80,7 @@ const Auth = ({ closeAuthModal }) => {
                 />
               </div>
               <div>
-                <label>Phone</label>
+                <label>Phone/Telegram</label>
                 <input
                   type="text"
                   value={phone}
