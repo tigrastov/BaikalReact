@@ -7,6 +7,9 @@ const AdminPanel = () => {
   const [orders, setOrders] = useState([]); // Состояние для хранения заказов
   const [loading, setLoading] = useState(true); // Состояние для отображения загрузки
   const [error, setError] = useState(null); // Состояние для отображения ошибок
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false); // Состояние для модального окна
+  const [currentPage, setCurrentPage] = useState(1); // Текущая страница пагинации
+  const [ordersPerPage] = useState(10); // Количество заказов на странице
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -106,6 +109,35 @@ const AdminPanel = () => {
     return dateB - dateA; // Сортировка по убыванию (новые сверху)
   });
 
+  // Пагинация
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  // Переход на следующую страницу
+  const nextPage = () => {
+    if (currentPage < Math.ceil(sortedOrders.length / ordersPerPage)) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  // Переход на предыдущую страницу
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Открытие модального окна
+  const openAddProductModal = () => {
+    setIsAddProductModalOpen(true);
+  };
+
+  // Закрытие модального окна
+  const closeAddProductModal = () => {
+    setIsAddProductModalOpen(false);
+  };
+
   if (loading) {
     return <p>Loading...</p>; // Отображаем загрузку, пока данные не загружены
   }
@@ -116,80 +148,116 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel">
-      <h1>Admin Panel</h1>
-
+      <div className="admin-header">
+        <h1>Admin Panel</h1>
+        <button className="add-product-button" onClick={openAddProductModal}>
+          Add Product
+        </button>
+      </div>
 
       {/* Таблица с заказами */}
-      <table className="orders-table">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>User</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Products</th>
-            <th>Total Cost</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Actions</th> {/* Новая колонка для действий */}
-          </tr>
-        </thead>
-        <tbody>
-          {sortedOrders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.id}</td>
-              <td>{order.user?.name || "N/A"}</td>
-              <td>{order.user?.email || "N/A"}</td>
-              <td>{order.user?.phone || "N/A"}</td>
-              <td>{order.user?.address || "N/A"}</td>
-              <td>
-                {order.positions && order.positions.length > 0 ? (
-                  <ul className="products-list">
-                    {order.positions.map((position, index) => (
-                      <li key={index}>
-                        {position.product ? (
-                          <>
-                            <strong>{position.product.title}</strong> (x{position.count}) -{" "}
-                            {position.cost} din
-                          </>
-                        ) : (
-                          <>
-                            <strong>{position.title}</strong> (x{position.count}) -{" "}
-                            {position.cost} din
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  "No positions found."
-                )}
-              </td>
-              <td>{order.cost || "N/A"} din</td>
-              <td>
-                <span className={`status-${order.status.toLowerCase().replace(" ", "-")}`}>
-                  {order.status || "N/A"}
-                </span>
-              </td>
-              <td>{formatDate(order.date)}</td>
-              <td>
-                {/* Выпадающий список для смены статуса */}
-                <select
-                  value={order.status || "New"}
-                  onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                >
-                  <option value="New">New</option>
-                  <option value="In progress">In progress</option>
-                  <option value="Delivery">Delivery</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Canceled">Canceled</option>
-                </select>
-              </td>
+      <div className="table-container">
+        <table className="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Products</th>
+              <th>Total Cost</th>
+              <th>Status</th>
+              <th>Change Status</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {currentOrders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.user?.name || "N/A"}</td>
+                <td>{order.user?.email || "N/A"}</td>
+                <td>{order.user?.phone || "N/A"}</td>
+                <td>{order.user?.address || "N/A"}</td>
+                <td>
+                  {order.positions && order.positions.length > 0 ? (
+                    <ul className="products-list">
+                      {order.positions.map((position, index) => (
+                        <li key={`${order.id}-${position.id}-${index}`}>
+                          {position.product ? (
+                            <>
+                              <strong>{position.product.title}</strong> (x{position.count}) -{" "}
+                              {position.cost} din
+                            </>
+                          ) : (
+                            <>
+                              <strong>{position.title}</strong> (x{position.count}) -{" "}
+                              {position.cost} din
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    "No positions found."
+                  )}
+                </td>
+                <td>{order.cost || "N/A"} din</td>
+                <td>
+                  <span className={`status-${order.status.toLowerCase().replace(" ", "-")}`}>
+                    {order.status || "N/A"}
+                  </span>
+                </td>
+                <td>
+                  <select
+                    value={order.status || "New"}
+                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                    className={`status-select status-${order.status.toLowerCase().replace(" ", "-")}`}
+                  >
+                    <option value="New">New</option>
+                    <option value="In progress">In progress</option>
+                    <option value="Delivery">Delivery</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Canceled">Canceled</option>
+                  </select>
+                </td>
+                <td>{formatDate(order.date)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Пагинация */}
+      <div className="pagination">
+        <button onClick={prevPage} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {Math.ceil(sortedOrders.length / ordersPerPage)}
+        </span>
+        <button
+          onClick={nextPage}
+          disabled={currentPage === Math.ceil(sortedOrders.length / ordersPerPage)}
+        >
+          Next
+        </button>
+      </div>
+
+      {/* Модальное окно для добавления товара */}
+      {isAddProductModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <button className="close-modal-button" onClick={closeAddProductModal}>
+              &times;
+            </button>
+            <h2>Add Product</h2>
+            <p>This is where the product addition form will go.</p>
+            {/* Здесь можно добавить форму для добавления товара */}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
