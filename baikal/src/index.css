@@ -1024,3 +1024,236 @@ max-width: 100%;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Основные стили для страницы */
+.admin-panel {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.admin-panel h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.admin-panel p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* Стили для таблицы */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.orders-table th {
+  background-color: #164c8a;
+  color: #fff;
+  font-weight: bold;
+}
+
+.orders-table tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.orders-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.orders-table tbody tr:last-of-type {
+  border-bottom: 2px solid #007bff;
+}
+
+.orders-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Стили для списка продуктов */
+.products-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.products-list li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.products-list li strong {
+  color: #333;
+}
+
+/* Стили для кнопок (если будут добавлены позже) */
+.button {
+  background-color: #0056b3;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.button:hover {
+  background-color: #004080;
+}
+
+/* Стили для выпадающего списка */
+select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+select:hover {
+  border-color: #007bff;
+}
+
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Стили для статусов */
+.status-new {
+  color: red; /* Красный */
+  font-weight: bold;
+}
+
+.status-in-progress {
+  color: purple; /* Фиолетовый */
+  font-weight: bold;
+}
+
+.status-delivery {
+  color: #ffc107; /* Желтый */
+  font-weight: bold;
+}
+
+.status-completed {
+  color: #6c757d; /* Серый */
+  font-weight: bold;
+}
+
+.status-canceled {
+  color: lightgrey; /* Светло-серый */
+  font-weight: bold;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 10px;
+  }
+
+  .admin-panel h1 {
+    font-size: 1.5rem;
+  }
+
+  .admin-panel p {
+    font-size: 0.9rem;
+  }
+
+  .orders-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+
+  .orders-table th {
+    font-size: 0.9rem;
+  }
+
+  .products-list li {
+    font-size: 0.8rem;
+  }
+
+  select {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .button {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-panel h1 {
+    font-size: 1.2rem;
+  }
+
+  .admin-panel p {
+    font-size: 0.8rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 6px;
+    font-size: 0.7rem;
+  }
+
+  .orders-table th {
+    font-size: 0.8rem;
+  }
+
+  .products-list li {
+    font-size: 0.7rem;
+  }
+
+  select {
+    padding: 3px 6px;
+    font-size: 0.7rem;
+  }
+
+  .button {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+  }
+}

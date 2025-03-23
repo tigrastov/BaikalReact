@@ -8,6 +8,37 @@ function OrdersSidebar({ isOpen, onClose }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Функция для преобразования даты в читаемый формат
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+
+    // Если date — это объект Timestamp
+    if (typeof date.toDate === "function") {
+      return date.toDate().toLocaleString();
+    }
+    // Если date — это строка в формате ISO
+    else if (typeof date === "string") {
+      try {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate.toLocaleString();
+        }
+      } catch (error) {
+        console.log("Error parsing date:", error);
+      }
+    }
+    // Если date — это объект Date
+    else if (date instanceof Date) {
+      return date.toLocaleString();
+    }
+    // Если date — это число (timestamp в миллисекундах)
+    else if (typeof date === "number") {
+      return new Date(date).toLocaleString();
+    }
+
+    return "N/A";
+  };
+
   // Функция для обновления заказов
   const refreshOrders = async () => {
     if (user) {
@@ -31,6 +62,13 @@ function OrdersSidebar({ isOpen, onClose }) {
     }
   }, [isOpen, user]);
 
+  // Сортируем заказы по дате (новые сверху)
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+    const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+    return dateB - dateA; // Сортировка по убыванию (новые сверху)
+  });
+
   if (!isOpen) return null;
 
   return (
@@ -44,14 +82,14 @@ function OrdersSidebar({ isOpen, onClose }) {
           <p>Loading orders...</p>
         ) : error ? (
           <p>{error}</p>
-        ) : orders.length === 0 ? (
+        ) : sortedOrders.length === 0 ? ( // Используем sortedOrders
           <p>No orders found.</p>
         ) : (
           <div className="orders-list">
-            {orders.map((order) => (
+            {sortedOrders.map((order) => ( // Используем sortedOrders
               <div key={order.id} className="order-item">
                 <h2>Order ID: {order.id}</h2>
-                <p>Date: {order.date}</p>
+                <p>Date: {formatDate(order.date)}</p>
                 <p>Status: {order.status}</p>
                 <p>Total Cost: {order.cost} din</p>
                 <div className="order-positions">
@@ -70,13 +108,12 @@ function OrdersSidebar({ isOpen, onClose }) {
           </div>
         )}
 
-
-<div className="order-info" >
-<p>To clarify the details of the order readiness, you can always contact us.
-   All our contacts are in the "Information" section.</p>
-</div>
-
-
+        <div className="order-info">
+          <p>
+            To clarify the details of the order readiness, you can always contact us.
+            All our contacts are in the "Information" section.
+          </p>
+        </div>
       </div>
     </div>
   );

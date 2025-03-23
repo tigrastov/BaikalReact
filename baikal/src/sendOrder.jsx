@@ -1,29 +1,20 @@
 import { db } from "./firebase"; // Импортируем инициализированный Firestore
-import { collection, addDoc, doc, setDoc } from "firebase/firestore"; // Импортируем необходимые функции
+import { collection, addDoc, doc, setDoc, Timestamp } from "firebase/firestore"; // Импортируем необходимые функции
 import { Order } from "./models/models"; // Импортируем класс Order
 
 const sendOrder = async (orderData) => {
   try {
     const ordersCollection = collection(db, "orders");
 
-    // Форматируем дату заказа
-    const date = new Date().toLocaleString("en-US", {
-      timeZone: "Europe/Berlin", // Укажите нужную временную зону (UTC+1)
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: true, // Используем 12-часовой формат (AM/PM)
-    }) + " UTC+1"; // Добавляем временную зону вручную
+    // Используем Timestamp для сохранения даты
+    const date = Timestamp.fromDate(new Date());
 
     // Создаем объект Order
     const order = new Order(
       orderData.id || Date.now().toString(), // Уникальный ID заказа
       orderData.userID, // ID пользователя
       orderData.positions, // Массив позиций
-      date, // Дата заказа (строка)
+      date, // Дата заказа (Timestamp)
       orderData.status || "New", // Статус заказа
       orderData.cost // Общая стоимость заказа
     );
@@ -41,7 +32,7 @@ const sendOrder = async (orderData) => {
     await setDoc(orderRef, {
       id: order.id,
       userID: order.userID,
-      date: order.date,
+      date: order.date, // Сохраняем как Timestamp
       status: order.status,
       cost: order.cost,
     });

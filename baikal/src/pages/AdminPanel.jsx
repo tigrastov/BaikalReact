@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase"; // Импортируем Firestore
-import { collection, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
+
 
 const AdminPanel = () => {
   const [orders, setOrders] = useState([]); // Состояние для хранения заказов
@@ -10,7 +11,6 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-
         const ordersSnapshot = await getDocs(collection(db, "orders"));
         const ordersData = ordersSnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -49,6 +49,63 @@ const AdminPanel = () => {
     fetchOrders();
   }, []);
 
+  // Функция для преобразования даты в читаемый формат
+  const formatDate = (date) => {
+    if (!date) return "N/A";
+
+    // Если date — это объект Timestamp
+    if (typeof date.toDate === "function") {
+      return date.toDate().toLocaleString();
+    }
+    // Если date — это строка в формате ISO
+    else if (typeof date === "string") {
+      try {
+        const parsedDate = new Date(date);
+        if (!isNaN(parsedDate.getTime())) {
+          return parsedDate.toLocaleString();
+        }
+      } catch (error) {
+        console.log("Error parsing date:", error);
+      }
+    }
+    // Если date — это объект Date
+    else if (date instanceof Date) {
+      return date.toLocaleString();
+    }
+    // Если date — это число (timestamp в миллисекундах)
+    else if (typeof date === "number") {
+      return new Date(date).toLocaleString();
+    }
+
+    return "N/A";
+  };
+
+  // Функция для обновления статуса заказа
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const orderRef = doc(db, "orders", orderId);
+      await updateDoc(orderRef, { status: newStatus });
+
+      // Обновляем состояние заказов
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+
+      console.log("Order status updated successfully!");
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  // Сортируем заказы по дате (новые сверху)
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
+    const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
+    return dateB - dateA; // Сортировка по убыванию (новые сверху)
+  });
+
   if (loading) {
     return <p>Loading...</p>; // Отображаем загрузку, пока данные не загружены
   }
@@ -58,12 +115,12 @@ const AdminPanel = () => {
   }
 
   return (
-    <div>
+    <div className="admin-panel">
       <h1>Admin Panel</h1>
       <p>Welcome to the admin panel!</p>
 
       {/* Таблица с заказами */}
-      <table>
+      <table className="orders-table">
         <thead>
           <tr>
             <th>Order ID</th>
@@ -75,64 +132,62 @@ const AdminPanel = () => {
             <th>Total Cost</th>
             <th>Status</th>
             <th>Date</th>
+            <th>Actions</th> {/* Новая колонка для действий */}
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => {
-            // Преобразуем дату в читаемый формат
-            let displayDate = "N/A";
-            if (order.date) {
-              // Если date — это объект Timestamp
-              if (typeof order.date.toDate === "function") {
-                displayDate = order.date.toDate().toLocaleString();
-              }
-              // Если date — это строка
-              else if (typeof order.date === "string") {
-                const parsedDate = new Date(order.date);
-                if (!isNaN(parsedDate.getTime())) {
-                  displayDate = parsedDate.toLocaleString();
-                }
-              }
-            }
-
-            return (
-              <tr key={order.id}>
-                <td>{order.id}</td>
-                <td>{order.user?.name || "N/A"}</td>
-                <td>{order.user?.email || "N/A"}</td>
-                <td>{order.user?.phone || "N/A"}</td>
-                <td>{order.user?.address || "N/A"}</td>
-                <td>
-                  {/* Проверяем, существует ли positions */}
-                  {order.positions && order.positions.length > 0 ? (
-                    <ul>
-                      {order.positions.map((position) => (
-                        <li key={position.id}>
-                          {/* Проверяем, существует ли product и его поля */}
-                          {position.product ? (
-                            <>
-                              <strong>{position.product.title}</strong> (x{position.count}) -{" "}
-                              {position.cost} din
-                            </>
-                          ) : (
-                            <>
-                              <strong>{position.title}</strong> (x{position.count}) -{" "}
-                              {position.cost} din
-                            </>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    "No positions found."
-                  )}
-                </td>
-                <td>{order.cost || "N/A"} din</td>
-                <td>{order.status || "N/A"}</td>
-                <td>{displayDate}</td>
-              </tr>
-            );
-          })}
+          {sortedOrders.map((order) => (
+            <tr key={order.id}>
+              <td>{order.id}</td>
+              <td>{order.user?.name || "N/A"}</td>
+              <td>{order.user?.email || "N/A"}</td>
+              <td>{order.user?.phone || "N/A"}</td>
+              <td>{order.user?.address || "N/A"}</td>
+              <td>
+                {order.positions && order.positions.length > 0 ? (
+                  <ul className="products-list">
+                    {order.positions.map((position, index) => (
+                      <li key={index}>
+                        {position.product ? (
+                          <>
+                            <strong>{position.product.title}</strong> (x{position.count}) -{" "}
+                            {position.cost} din
+                          </>
+                        ) : (
+                          <>
+                            <strong>{position.title}</strong> (x{position.count}) -{" "}
+                            {position.cost} din
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  "No positions found."
+                )}
+              </td>
+              <td>{order.cost || "N/A"} din</td>
+              <td>
+                <span className={`status-${order.status.toLowerCase().replace(" ", "-")}`}>
+                  {order.status || "N/A"}
+                </span>
+              </td>
+              <td>{formatDate(order.date)}</td>
+              <td>
+                {/* Выпадающий список для смены статуса */}
+                <select
+                  value={order.status || "New"}
+                  onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                >
+                  <option value="New">New</option>
+                  <option value="In progress">In progress</option>
+                  <option value="Delivery">Delivery</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Canceled">Canceled</option>
+                </select>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
