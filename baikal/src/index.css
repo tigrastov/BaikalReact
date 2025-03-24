@@ -839,7 +839,7 @@ max-width: 100%;
 
 
 
-.modal-overlay {
+.modal-overlayy {
   position: fixed;
   top: 0;
   left: 0;
@@ -851,15 +851,15 @@ max-width: 100%;
   align-items: center;
 }
 
-.modal {
-  background-image: url('src/assets/placeholder.jpg'); 
+.modall {
+  background-color: #164c8a; 
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.modal-actions {
+.modal-actionss {
   display: flex;
   justify-content: center;
   gap: 10px;
@@ -869,7 +869,7 @@ max-width: 100%;
 .modal-actions button {
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
 }
 

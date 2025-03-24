@@ -2,8 +2,8 @@ import React from "react";
 
 const ConfirmationModal = ({ message, onConfirm, onCancel }) => {
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div className="modal-overlayy">
+      <div className="modall">
         <p>{message}</p>
         <div className="modal-actions">
           <button onClick={onConfirm}>Confirm</button>
