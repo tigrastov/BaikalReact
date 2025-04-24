@@ -7,18 +7,18 @@ class ErrorBoundary extends Component {
   }
 
   static getDerivedStateFromError(error) {
-    // Обновляем состояние, чтобы показать запасной UI
+    
     return { hasError: true };
   }
 
   componentDidCatch(error, errorInfo) {
-    // Логируем ошибку (например, отправляем в сервис мониторинга)
+    
     console.error("Error caught by ErrorBoundary:", error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      // Показываем запасной UI
+      
       return (
         <div className="error-boundary">
           <h2>Something went wrong.</h2>

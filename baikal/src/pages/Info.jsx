@@ -1,4 +1,4 @@
-import foto from '/yagoda.jpg'; // Импорт картинки
+import foto from '/yagoda.jpg'; 
 
 
 function Info() {
@@ -49,16 +49,16 @@ function Info() {
   </a>
 </p>
         </div>
-        {/* Первый контейнер для иконки */}
+
         <div className="icon1-container">
           <img src="/icons1.png" alt="Icon 1" className="icon" />
         </div>
 
-        {/* Второй контейнер для иконки */}
+
         <div className="icon2-container">
           <img src="/icons2.png" alt="Icon 2" className="icon" />
         </div>
-      </div> {/* Правая половина с фоном */}
+      </div> 
     </div>
   );
 }

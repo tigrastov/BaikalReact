@@ -1,36 +1,36 @@
-/* Сбросим маргины и паддинги для body */
+
 body {
   margin: 0;
   padding: 0;
   font-family: 'K2D', sans-serif;
 }
 
-/* Стили для хедера */
+
 header {
 
   display: flex;
-  flex-direction: column; /* Логотип сверху */
-  align-items: center;     /* Центрирование всех элементов */
+  flex-direction: column; 
+  align-items: center;    
   justify-content: space-between; 
-  padding: 10px 20px;      /* Отступы */
-  background-color: #164C8A; /* Цвет фона */
-  color: white;           /* Цвет текста */
-  position: relative;     /* Для позиционирования бургер-меню */
+  padding: 10px 20px;     
+  background-color: #164C8A;
+  color: white;           
+  position: relative;    
   font-family: 'K2D', sans-serif;
 
 
 }
 
 .link-style {
-  background: none; /* Убираем фон */
-  border: none; /* Убираем рамку */
-  padding: 0; /* Убираем отступы */
+  background: none; 
+  border: none; 
+  padding: 0; 
   font-family: 'K2D', sans-serif;
 
-  font-size: inherit; /* Наследуем размер шрифта */
-  color: white; /* Цвет как у ссылки */
-  text-decoration: none; /* Подчеркивание */
-  cursor: pointer; /* Курсор в виде указателя */
+  font-size: inherit; 
+  color: white; 
+  text-decoration: none; 
+  cursor: pointer; 
 }
 
 .link-style:hover {
@@ -38,20 +38,20 @@ header {
   text-decoration: underline; 
 }
 .cart-button {
-  display: inline-flex; /* Используем inline-flex для выравнивания */
-  align-items: center; /* Выравниваем элементы по центру по вертикали */
-  background: none; /* Убираем фон */
-  border: none; /* Убираем рамку */
-  padding: 0; /* Убираем отступы */
-  font-family: 'K2D', sans-serif; /* Наследуем шрифт */
-  font-size: 16px; /* Размер текста */
-  color: white; /* Цвет текста */
-  text-decoration: none; /* Убираем подчеркивание */
-  cursor: pointer; /* Курсор в виде указателя */
+  display: inline-flex; 
+  align-items: center; 
+  background: none; 
+  border: none; 
+  padding: 0; 
+  font-family: 'K2D', sans-serif; 
+  font-size: 16px; 
+  color: white; 
+  text-decoration: none; 
+  cursor: pointer; 
 }
 
 .cart-button:hover {
-  text-decoration: underline; /* Подчеркивание при наведении */
+  text-decoration: underline; 
 }
 
 .cart-count {
@@ -65,8 +65,8 @@ header {
 
 nav {
   display: flex;
-  justify-content: space-between; /* Распределяем элементы меню */
-  width: 50%;  /* Задаем ширину навигации, чтобы отступы между элементами были */
+  justify-content: space-between; 
+  width: 50%;  
 }
 
 nav ul {
@@ -77,14 +77,14 @@ nav ul {
 }
 
 nav ul li {
-  margin: 0 10px; /* Отступы между пунктами меню */
+  margin: 0 10px; 
   display: flex;
-  align-items: center; /* Выравниваем элементы по центру по вертикали */
+  align-items: center; 
 
 }
 
 nav ul li:first-child {
-  margin-left: 0; /* Убираем отступ у первой ссылки */
+  margin-left: 0; 
 }
 
 nav ul li a {
@@ -99,14 +99,14 @@ nav ul li a:hover {
 
 /* Логотип */
 header .logo img {
-  height: 50px; /* Высота логотипа */
-  margin-bottom: 10px; /* Отступ между логотипом и меню */
+  height: 50px; 
+  margin-bottom: 10px; 
 }
 
-/* Стили для навигации */
+
 nav ul {
   display: flex;
-  justify-content: space-between; /* Распределение по ширине */
+  justify-content: space-between; 
   list-style: none;
   margin: 0;
   padding: 0;
@@ -114,7 +114,7 @@ nav ul {
 }
 
 nav ul li {
-  margin: 0 10px; /* Отступы между ссылками */
+  margin: 0 10px; 
 }
 
 nav ul li a {
@@ -133,59 +133,56 @@ nav ul li a:hover {
 
 nav.open {
   display: block;
-  position: absolute; /* Позиционирование поверх остальных элементов */
-  top: 70px; /* Отступ сверху от хедера */
-  left: 0;
+  position: absolute; 
+  top: 70px; 
   right: 0;
   background-color: #164C8A;
   width: 100%;
   padding: 20px;
   border-radius: 5px;
-  z-index: 100; /* Меню будет поверх контента */
+  z-index: 100; 
 }
 
 
-/* Стили для бургер-меню */
+
 .burger {
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  position: absolute; /* Позиционируем бургер-меню в правом верхнем углу */
-  top: 20px;
+  position: absolute; 
   right: 20px;
-  z-index: 101; /* Бургер будет поверх меню */
+  z-index: 101; 
 }
-
 .burger-line {
   width: 25px;
   height: 3px;
   background-color: white;
   margin: 4px 0;
 }
-/* Медиазапрос для больших экранов, чтобы скрыть бургер-меню */
+
 @media (min-width: 768px) {
   .burger {
-    display: none; /* Скрыть бургер-меню на экранах шире 768px */
+    display: none; 
   }
 
-  /* Отображение меню на экранах больше 768px */
+ 
   nav {
     display: flex;
   }
 }
-/* Медиазапрос для маленьких экранов */
+
 @media (max-width: 768px) {
-  /* Скрываем навигацию на маленьких экранах */
+  
   nav {
     display: none;
   }
 
-  /* Показываем бургер-меню */
+  
   .burger {
     display: flex;
   }
 
-  /* При открытии меню показываем ссылки */
+  
   nav.open {
     display: block;
     position: absolute;
@@ -198,7 +195,7 @@ nav.open {
     border-radius: 5px;
   }
 
-  /* Стили для элементов меню внутри бургер-меню */
+  
   nav.open ul {
     display: flex;
     flex-direction: column;
@@ -219,16 +216,16 @@ nav.open {
 
 
 
-/* Основной контейнер (делим экран на 2 части) */
+
 .info-container {
   display: flex;
   width: 100vw;
   height: 100vh;
 }
 
-/* Левая половина (с текстом) */
+
 .info-text {
-  width: 50%; /* 50% ширины экрана */
+  width: 50%; 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -236,68 +233,68 @@ nav.open {
   padding: 20px;
   padding-left: 50px;
   padding-right: 50px;
-  background-color: #262B32; /* Черный фон для левой половины */
-  color: white; /* Белый цвет текста */
+  background-color: #262B32; 
+  color: white; 
   text-align: left;
-  font-size: 16px; /* Начальный размер шрифта */
+  font-size: 16px; 
 }
 
-/* Медиа-запросы для адаптации шрифта */
+
 @media (max-width: 1200px) {
   .info-text {
-    font-size: 16px; /* Уменьшаем размер шрифта на экранах меньше 1200px */
+    font-size: 16px; 
   }
 }
 
 @media (max-width: 900px) {
   .info-text {
-    font-size: 14px; /* Уменьшаем размер шрифта на экранах меньше 900px */
+    font-size: 14px; 
   }
 }
 
 @media (max-width: 600px) {
   .info-text {
-    font-size: 12px; /* Уменьшаем размер шрифта на экранах меньше 600px */
+    font-size: 12px; 
   }
 }
 .yagoda{
-  width: 100%;/* Задаем ширину картинки */
-  max-height: 65%; /* Задаем высоту картинки */
-  border-radius: 20px; /* Закругляем углы */
+  width: 100%;
+  max-height: 65%; 
+  border-radius: 20px; 
 }
 
-/* Правая половина (фон-картинка) */
+
 .info-bg {
-  width: 50%; /* 50% экрана */
+  width: 50%; 
   background-image: url('/Collage.png'); 
   background-size: cover;
   background-position: center; 
   background-color: black;
-  position: relative; /* Для позиционирования элементов поверх фона */
+  position: relative;
 }
 
-/* Первый контейнер для иконки (позиционирование первой иконки) */
+
 .icon1-container {
   position: absolute;
-  top: 15%; /* Позиционируем иконку по вертикали */
-  left: 50%; /* Позиционируем иконку по горизонтали */
+  top: 15%; 
+  left: 50%; 
 
   max-width: 80%;
   text-align: center;
   padding: 10px;
 }
 
-/* Второй контейнер для иконки (позиционирование второй иконки) */
+
 .icon2-container {
   position: absolute;
-  top: 15%; /* Позиционируем вторую иконку по вертикали */
-  left: 5%; /* Позициоируем вторую иконку по горизонтали */
+  top: 15%; 
+  left: 5%; 
   max-width: 80%;
   text-align: center;
   padding: 10px;
 }
 
-/* Стили для картинок */
+
 .icon {
   
 max-width: 100%;
@@ -305,7 +302,7 @@ max-width: 100%;
   margin: 10px;
 }
 
-/* Контейнер с номером и ссылками */
+
 .info-overlay {
   position: absolute;
   top: 0;
@@ -316,14 +313,14 @@ max-width: 100%;
   padding: 10px;
   color: white;
   display: flex;
-  flex-direction: row; /* Горизонтально по умолчанию */
-  justify-content: space-around; /* Равномерное распределение */
+  flex-direction: row; 
+  justify-content: space-around; 
   align-items: center;
   margin: 0;
-  gap: 20px; /* Добавляем расстояние между элементами */
+  gap: 20px; 
 }
 
-/* Стили для ссылок и номера */
+
 .info-overlay a,
 .info-overlay .phone-number {
   color: white;
@@ -336,7 +333,7 @@ max-width: 100%;
   text-decoration: underline;
 }
 
-/* Адаптивное уменьшение шрифта */
+
 @media (max-width: 1024px) {
   .info-overlay a,
   .info-overlay .phone-number {
@@ -346,7 +343,7 @@ max-width: 100%;
 
 @media (max-width: 768px) {
   .info-overlay {
-    flex-direction: column; /* Переключаемся в столбец */
+    flex-direction: column; 
     height: auto;
     padding: 15px 0;
   }
@@ -382,7 +379,7 @@ max-width: 100%;
 
 
 
-/* Стиль для каталога */
+
 .catalog {
   background-image: url('/bgCatalog.jpg');
   background-size: cover;
@@ -398,7 +395,7 @@ max-width: 100%;
 
 .catalog-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 300px минимальный размер карточки */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
   gap: 20px;
   padding: 20px;
   max-width: 1200px;
@@ -464,14 +461,14 @@ max-width: 100%;
   color: white;
 }
 
-/* Стиль для корзины (горизонтальный контент в карточках) */
+
 .cart-items {
   display: flex;
-  flex-direction: column; /* Вертикальное расположение для корзины */
+  flex-direction: column; 
   gap: 10px;
   padding: 20px;
-  max-width: 100%; /* Корзина будет адаптироваться под ширину экрана */
-  margin-top: 30px; /* Чтобы корзина не перекрывала товары */
+  max-width: 100%; 
+  margin-top: 30px; 
 }
 
 .cart-item {
@@ -565,7 +562,7 @@ max-width: 100%;
 }
 
 .clear-cart-button:hover {
-  background-color: #d32f2f; /* Темно-красный при наведении */
+  background-color: #d32f2f; 
   color: white;
   border: none;
   padding: 10px 20px;
@@ -581,32 +578,31 @@ max-width: 100%;
 
 
 
-/* Адаптивность для каталога и корзины */
+
 @media (max-width: 768px) {
   .catalog-container {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Уменьшаем размер карточек */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
   }
-
+}
   .cart-items {
     padding: 10px;
   }
 
   .product-card {
-    padding: 15px; /* Уменьшаем отступы в карточках */
+    padding: 15px;
   }
 
   .product-image {
-    height: 150px; /* Уменьшаем высоту картинок в маленьком экране */
-  }
+    height: 150px; 
 
   .cart-item {
-    flex-direction: column; /* Вертикальное расположение карт в корзине */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
   }
 
   .cart-item-image {
-    width: 100px; /* Увеличиваем картинки в корзине */
+    width: 100px; 
     height: 100px;
   }
 
@@ -625,15 +621,15 @@ max-width: 100%;
 
 @media (max-width: 480px) {
   .catalog-container {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Еще меньше для очень узких экранов */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
   }
 
   .product-card {
-    padding: 10px; /* Еще меньше отступы */
+    padding: 10px; 
   }
 
   .product-image {
-    height: 120px; /* Еще меньше картинки на очень узких экранах */
+    height: 120px; 
   }
 
   .cart-item-image {
@@ -706,27 +702,27 @@ max-width: 100%;
 }
 
 
-/* Стили для сайдбара корзины */
+
 .cart-sidebar {
   position: fixed;
   top: 0;
-  right: -500px; /* Скрываем сайдбар за пределами экрана */
-  width: 400px; /* Ширина сайдбара */
-  height: 100vh; /* Высота на весь экран */
-  background-color: rgba(22, 76, 138, 0.5); /* Фоновый цвет */
+  right: -500px; 
+  width: 400px; 
+  height: 100vh; 
+  background-color: rgba(22, 76, 138, 0.5); 
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  transition: right 0.3s ease-in-out; /* Анимация выезжания */
-  z-index: 1000; /* Убедимся, что сайдбар поверх других элементов */
+  transition: right 0.3s ease-in-out; 
+  z-index: 1000; 
   border-radius: 20px;
   padding: 10px;
 }
 
-/* Класс для открытого сайдбара */
+
 .cart-sidebar.open {
-  right: 0; /* Показываем сайдбар */
+  right: 0; 
 }
 
-/* Кнопка закрытия сайдбара */
+
 .close-cart {
   position: absolute;
   top: 10px;
@@ -737,7 +733,7 @@ max-width: 100%;
   cursor: pointer;
 }
 
-/* Затемнение фона при открытой корзине */
+
 .cart-overlay {
   position: fixed;
   top: 0;
@@ -745,11 +741,11 @@ max-width: 100%;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Под сайдбаром, но поверх остального контента */
+  z-index: 999; 
 }
 
 
-/* Стили для кнопки корзины */
+
 .cart-button {
   position: relative;
   background: none;
@@ -760,7 +756,7 @@ max-width: 100%;
   padding: 10px;
 }
 
-/* Красный кружок с количеством товаров */
+
 .cart-count {
   position: absolute;
   top: -5px;
@@ -823,15 +819,6 @@ max-width: 100%;
 .checkout-button:hover {
   background-color: #45a049; 
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -907,13 +894,13 @@ max-width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #164c8a; /* Фоновый цвет */
+  background-color: #164c8a; 
 }
 
 .loading-image {
-  width: 100%; /* Ширина на весь экран */
-  height: 100%; /* Высота на весь экран */
-  object-fit: cover; /* Чтобы картинка заполняла экран без искажений */
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
 }
 
 

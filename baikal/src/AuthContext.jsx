@@ -13,11 +13,11 @@ import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children, adminId }) => { // Добавляем adminId в пропсы
+export const AuthProvider = ({ children, adminId }) => {
     const [user, setUser] = useState(null);
     const isAuthenticated = !!user;
 
-    // Проверяем, является ли пользователь администратором
+    
     const isAdmin = user?.uid === adminId;
 
     useEffect(() => {
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children, adminId }) => { // Добавляем a
         <AuthContext.Provider value={{ 
             user, 
             isAuthenticated, 
-            isAdmin, // Добавляем isAdmin в контекст
+            isAdmin, 
             signUp, 
             signIn, 
             logOut, 

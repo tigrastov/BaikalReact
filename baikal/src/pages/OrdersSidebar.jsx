@@ -8,15 +8,15 @@ function OrdersSidebar({ isOpen, onClose }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Функция для преобразования даты в читаемый формат
+
   const formatDate = (date) => {
     if (!date) return "N/A";
 
-    // Если date — это объект Timestamp
+
     if (typeof date.toDate === "function") {
       return date.toDate().toLocaleString();
     }
-    // Если date — это строка в формате ISO
+
     else if (typeof date === "string") {
       try {
         const parsedDate = new Date(date);
@@ -27,11 +27,11 @@ function OrdersSidebar({ isOpen, onClose }) {
         console.log("Error parsing date:", error);
       }
     }
-    // Если date — это объект Date
+
     else if (date instanceof Date) {
       return date.toLocaleString();
     }
-    // Если date — это число (timestamp в миллисекундах)
+
     else if (typeof date === "number") {
       return new Date(date).toLocaleString();
     }
@@ -39,7 +39,7 @@ function OrdersSidebar({ isOpen, onClose }) {
     return "N/A";
   };
 
-  // Функция для обновления заказов
+
   const refreshOrders = async () => {
     if (user) {
       setLoading(true);
@@ -55,18 +55,18 @@ function OrdersSidebar({ isOpen, onClose }) {
     }
   };
 
-  // Загружаем заказы при монтировании компонента
+
   useEffect(() => {
     if (isOpen) {
       refreshOrders();
     }
   }, [isOpen, user]);
 
-  // Сортируем заказы по дате (новые сверху)
+
   const sortedOrders = [...orders].sort((a, b) => {
     const dateA = a.date?.toDate ? a.date.toDate() : new Date(a.date);
     const dateB = b.date?.toDate ? b.date.toDate() : new Date(b.date);
-    return dateB - dateA; // Сортировка по убыванию (новые сверху)
+    return dateB - dateA; 
   });
 
   if (!isOpen) return null;
@@ -96,7 +96,7 @@ function OrdersSidebar({ isOpen, onClose }) {
                   <h3>Positions:</h3>
                   {order.positions.map((position, index) => (
                     <div
-                      key={`${order.id}-${position.id}-${index}`} // Уникальный ключ
+                      key={`${order.id}-${position.id}-${index}`} 
                       className="position-item"
                     >
                       <p>Title: {position.title}</p>

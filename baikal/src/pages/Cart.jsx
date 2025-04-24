@@ -3,16 +3,16 @@ import { CartContext } from "../CartContext";
 import { useAuth } from "../AuthContext";
 import sendOrder from "../sendOrder";
 import { Order, Position } from "../models/models";
-import ConfirmationModal from "../components/ConfirmationModal"; // Импортируем компонент
+import ConfirmationModal from "../components/ConfirmationModal"; 
 
 function Cart({ openAuthModal }) {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
   const { user, isAuthenticated } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false); // Состояние для модального окна
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const totalCost = cart.reduce((sum, item) => {
-    const price = Number(item.price); // Явное преобразование в число
-    const quantity = Number(item.quantity || 1); // Явное преобразование в число
+    const price = Number(item.price); 
+    const quantity = Number(item.quantity || 1); 
     return sum + price * quantity;
   }, 0);
 
@@ -33,12 +33,12 @@ console.log("Quantities:", cart.map(item => item.quantity || 1));
       return;
     }
 
-    // Показываем модальное окно
+    
     setIsModalOpen(true);
   };
 
   const handleConfirmOrder = async () => {
-    setIsModalOpen(false); // Закрываем модальное окно
+    setIsModalOpen(false); 
 
     const positions = cart.map(
       (item) =>
@@ -72,7 +72,7 @@ console.log("Quantities:", cart.map(item => item.quantity || 1));
   };
 
   const handleCancelOrder = () => {
-    setIsModalOpen(false); // Закрываем модальное окно
+    setIsModalOpen(false); 
     console.log("Order canceled");
   };
 
@@ -123,7 +123,7 @@ console.log("Quantities:", cart.map(item => item.quantity || 1));
         </>
       )}
 
-      {/* Модальное окно подтверждения */}
+
       {isModalOpen && (
         <ConfirmationModal
           message="Are you sure you want to place this order?"

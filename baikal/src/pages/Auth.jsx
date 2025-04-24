@@ -12,12 +12,12 @@ const Auth = ({ closeAuthModal }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // Используем данные из user для заполнения полей
+  
   const [name, setName] = useState(user?.name ?? "");
   const [phone, setPhone] = useState(user?.phone ?? "");
   const [address, setAddress] = useState(user?.address ?? "");
 
-  // Обновляем поля, если user изменился
+  
   useEffect(() => {
     if (user) {
       setName(user?.name ?? "");
@@ -65,7 +65,7 @@ const Auth = ({ closeAuthModal }) => {
         {error && <p style={{ color: "red" }}>{error}</p>}
         {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
 
-        {/* Поля профиля отображаются, если пользователь авторизован */}
+        
         {user && (
           <>
             <h2>Profile</h2>
@@ -103,7 +103,7 @@ const Auth = ({ closeAuthModal }) => {
           </>
         )}
 
-        {/* Форма авторизации/регистрации отображается, если пользователь не авторизован */}
+        
         {!user && (
           <>
             <form onSubmit={handleAuth}>
@@ -133,7 +133,7 @@ const Auth = ({ closeAuthModal }) => {
   );
 };
 
-// Добавляем определение modalStyles
+
 const modalStyles = {
   overlay: {
     position: "fixed",

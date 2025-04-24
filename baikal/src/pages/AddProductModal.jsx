@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { db, storage } from "../firebase"; // Импортируем Firestore и Storage
+import { db, storage } from "../firebase"; 
 import { collection, addDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
@@ -21,12 +21,12 @@ const AddProductModal = ({ isOpen, onClose }) => {
     setLoading(true);
 
     try {
-      // Загружаем изображение в Firebase Storage
+      
       const storageRef = ref(storage, `products/${image.name}`);
       await uploadBytes(storageRef, image);
       const imageUrl = await getDownloadURL(storageRef);
 
-      // Добавляем товар в Firestore
+      
       const docRef = await addDoc(collection(db, "products"), {
         title,
         price: parseInt(price, 10),
@@ -36,7 +36,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
       });
 
       console.log("Product added with ID: ", docRef.id);
-      onClose(); // Закрываем модальное окно после успешного добавления
+      onClose(); 
     } catch (error) {
       console.error("Error adding product: ", error);
     } finally {

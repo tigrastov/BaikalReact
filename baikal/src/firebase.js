@@ -1,4 +1,4 @@
-// src/firebase.js
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -12,10 +12,10 @@ const firebaseConfig = {
     messagingSenderId: "1058007115193",
     appId: "1:1058007115193:web:7af20e3af2517a8536c268"
   };
-// Инициализируем Firebase
+
 const app = initializeApp(firebaseConfig);
 
-// Экспортируем модули
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
